@@ -11,6 +11,8 @@ object caseExpression {
       case "30" => println(age);
       case "40" => println(age);
       case "50" => println(age);
+
+      case "default" => println("wrong input")
     }
   }
 }
