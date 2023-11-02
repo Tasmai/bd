@@ -1,0 +1,113 @@
+C:\Users\faiss>spark-shell
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://Fsk:4040
+Spark context available as 'sc' (master = local[*], app id = local-1698843254145).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.2.4
+      /_/
+
+Using Scala version 2.12.15 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_202)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> 23/11/01 18:24:31 WARN ProcfsMetricsGetter: Exception when trying to compute pagesize, as a result reporting of ProcessTree metrics is stopped
+
+scala> val x = spark.read.json("C:/spark-3.2.4/examples/src/main/resources/people.json")
+x: org.apache.spark.sql.DataFrame = [age: bigint, name: string]
+
+scala> x.show()
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  30|   Andy|
+|  19| Justin|
++----+-------+
+
+
+scala> x.printSchema()
+root
+ |-- age: long (nullable = true)
+ |-- name: string (nullable = true)
+
+
+scala> x.select($"name", $"age").show()
++-------+----+
+|   name| age|
++-------+----+
+|Michael|null|
+|   Andy|  30|
+| Justin|  19|
++-------+----+
+
+
+scala> x.filter($"age">20)
+res3: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: bigint, name: string]
+
+scala> x.filter($"age">20).show()
++---+----+
+|age|name|
++---+----+
+| 30|Andy|
++---+----+
+
+
+scala> x.select($"age"+1).show()
++---------+
+|(age + 1)|
++---------+
+|     null|
+|       31|
+|       20|
++---------+
+
+
+scala> val mydata = spark.read.format("csv").option("inferschema", "true").option("header", "true").load("C:/spark-3.2.4/examples/src/main/resources/people.json")
+mydata: org.apache.spark.sql.DataFrame = [{"name":"Michael"}: string]
+
+scala> mydata.show()
++------------------+
+|{"name":"Michael"}|
++------------------+
+|    {"name":"Andy"|
+|  {"name":"Justin"|
++------------------+
+
+
+scala> val myBankData = spark.read.format("csv").option("inferschema", "true").option("header", "true").load("C:/spark-3.2.4/examples/src/main/resources/Banking.csv")
+myBankData: org.apache.spark.sql.DataFrame = [age: int, Name: string ... 1 more field]
+
+scala> myBankData.show()
++---+----+------+
+|age|Name|salary|
++---+----+------+
+| 12| fsk| 98000|
+| 32| ark| 98000|
+| 87|  fs|  2300|
+| 96|  ar|  2400|
++---+----+------+
+
+
+scala> myBankData.createOrReplaceTempView("MyInBankData")
+
+scala> val res = spark.sql("select * from MyInBankData where age > 50")
+res: org.apache.spark.sql.DataFrame = [age: int, Name: string ... 1 more field]
+
+
+scala> res.write.save("MyOutBankData")
+
+scala> spark.read.load("MyOutBankData/part-00000-f6645e60-2930-4022-9754-41e8f0456634-c000.snappy.parquet").show()
++---+----+------+
+|age|Name|salary|
++---+----+------+
+| 87|  fs|  2300|
+| 96|  ar|  2400|
++---+----+------+
+
+
