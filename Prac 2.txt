@@ -48,3 +48,47 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+approach 2
+
+from collections import Counter
+
+# Sample dataset
+data = [
+    "This is a sample text. It contains some words.",
+    "This is another sample text with some words.",
+    "And here's a third text, with more words.",
+]
+
+# Mapper function
+def mapper(text):
+    # Split text into words and count word frequencies
+    words = text.split()
+    word_count = Counter(words)
+
+    # Count the frequency of each character
+    char_count = Counter("".join(words))
+
+    return word_count, char_count
+
+# Reducer function
+def reducer(counts1, counts2):
+    # Merge the counts from two mappers
+    word_count = counts1[0] + counts2[0]
+    char_count = counts1[1] + counts2[1]
+
+    return word_count, char_count
+
+# Map-Reduce operation
+initial_counts = (Counter(), Counter())  # Initialize with empty counters
+for text in data:
+    word_count, char_count = mapper(text)
+    initial_counts = reducer(initial_counts, (word_count, char_count))
+
+# Result
+word_count, char_count = initial_counts
+print("Word frequencies:")
+print(word_count)
+print("\nCharacter frequencies:")
+print(char_count)
