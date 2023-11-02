@@ -1,0 +1,50 @@
+from collections import defaultdict
+from multiprocessing import Pool
+
+def map_function(chunk):
+    word_counts = defaultdict(int)
+    for line in chunk:
+        for word in line.split():
+            for char in word:
+                if char.isalpha():
+                    word_counts[char] += 1
+    return word_counts
+
+def reduce_function(results):
+    word_counts_combined = defaultdict(int)
+    for word_counts in results:
+        for char, count in word_counts.items():
+            word_counts_combined[char] += count
+    return word_counts_combined
+
+def main():
+    # Get the dataset from user input
+    dataset = []
+    while True:
+        line = input("Enter a line (or press Enter to finish): ")
+        if not line:
+            break
+        dataset.append(line)
+
+    # Get the number of processors from user input
+    num_processors = int(input("Enter the number of processors: "))
+
+    if len(dataset) < num_processors:
+        num_processors = len(dataset)
+
+    chunk_size = len(dataset) // num_processors
+    dataset_chunks = [dataset[i:i + chunk_size] for i in range(0, len(dataset), chunk_size)]
+
+    pool = Pool(processes=num_processors)
+    results = pool.map(map_function, dataset_chunks)
+    pool.close()
+    pool.join()
+
+    final_result = reduce_function(results)
+
+    # Print the character counts
+    for char, count in final_result.items():
+        print(f"'{char}': {count}")
+
+if __name__ == "__main__":
+    main()
