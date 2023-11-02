@@ -43,7 +43,7 @@ YARN-SITE.xml
 </property>
 
 <property>
-<name>yarn. nodemanager.auxservices.mapreduce.shuffle.class</name> 
+<name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name> 
 <value>org.apache.hadoop.mapred.shuffleHandler</value>
 </property>
 
