@@ -50,3 +50,17 @@ YARN-SITE.xml
 
 HADOOP-ENV(cmd)
 set JAVA_HOME="C:\Java\jdk1.8.0_202"
+
+
+After all this open cmd promt
+
+1. hdfs namenode -format 
+
+2. Start-all.cmd 
+
+3. jps
+
+go to chrome type
+
+localhost:9870
+localhost:8088
