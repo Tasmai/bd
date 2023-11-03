@@ -1,0 +1,24 @@
+spark-shell
+
+This are all codes to run
+
+
+
+val x = spark.read.json("C:/spark-3.2.4/examples/src/main/resources/people.json")
+x.show()
+
+x.printSchema()
+
+x.select($"name", $"age").show()
+
+x.filter($"age">20).show()
+
+x.select($"age"+1).show()
+
+val mydata = spark.read.format("csv").option("inferschema", "true").option("header", "true").load("C:/spark-3.2.4/examples/src/main/resources/people.json")
+
+mydata.show()
+
+
+
+
