@@ -1,3 +1,5 @@
+winget install --id Git.Git -e --source winget
+
 drive link to download softwares : https://drive.google.com/drive/u/0/folders/1zhbOI0Rt_s66gnvpRCSRohqJnTTZOYuz
 
 
